@@ -15,6 +15,7 @@ use SendCore\Resource\Verification;
 use SendCore\Resource\Analytics;
 use SendCore\Resource\Webhooks;
 use SendCore\Resource\Workflows;
+use SendCore\Resource\AgentInboxes;
 
 class Client
 {
@@ -35,6 +36,7 @@ class Client
     public Analytics $analytics;
     public Webhooks $webhooks;
     public Workflows $workflows;
+    public AgentInboxes $agentInboxes;
 
     public function __construct(string|array $apiKeyOrConfig)
     {
@@ -62,6 +64,7 @@ class Client
         $this->analytics = new Analytics($this);
         $this->webhooks = new Webhooks($this);
         $this->workflows = new Workflows($this);
+        $this->agentInboxes = new AgentInboxes($this);
     }
 
     public function request(string $method, string $path, ?array $body = null): array
