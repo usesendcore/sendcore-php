@@ -38,11 +38,12 @@ class AgentInboxes
         return $this->client->request('PUT', '/agent-inboxes/' . $id . '/webhook', ['url' => $url]);
     }
 
-    public function getEmails(string $id, ?int $page = null, ?int $limit = null): array
+    public function getEmails(string $id, ?int $page = null, ?int $limit = null, ?string $search = null): array
     {
         $query = [];
         if ($page !== null) $query['page'] = $page;
         if ($limit !== null) $query['limit'] = $limit;
+        if ($search !== null) $query['search'] = $search;
         $qs = !empty($query) ? '?' . http_build_query($query) : '';
         return $this->client->request('GET', '/agent-inboxes/' . $id . '/emails' . $qs);
     }
@@ -63,5 +64,29 @@ class AgentInboxes
             $params['to'] = [$params['to']];
         }
         return $this->client->request('POST', '/agent-inboxes/' . $id . '/send', $params);
+    }
+
+    public function listThreads(string $inboxId, ?int $page = null, ?int $limit = null): array
+    {
+        $query = [];
+        if ($page !== null) $query['page'] = $page;
+        if ($limit !== null) $query['limit'] = $limit;
+        $qs = !empty($query) ? '?' . http_build_query($query) : '';
+        return $this->client->request('GET', '/agent-inboxes/' . $inboxId . '/threads' . $qs);
+    }
+
+    public function getThread(string $inboxId, string $threadId): array
+    {
+        return $this->client->request('GET', '/agent-inboxes/' . $inboxId . '/threads/' . $threadId);
+    }
+
+    public function getThreadByEmail(string $inboxId, string $emailId): array
+    {
+        return $this->client->request('GET', '/agent-inboxes/' . $inboxId . '/emails/' . $emailId . '/thread');
+    }
+
+    public function getAttachment(string $inboxId, string $emailId, string $attachmentId): array
+    {
+        return $this->client->request('GET', '/agent-inboxes/' . $inboxId . '/emails/' . $emailId . '/attachments/' . $attachmentId);
     }
 }
